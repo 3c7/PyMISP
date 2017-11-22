@@ -450,6 +450,15 @@ class PyMISP(object):
 
     # ##### File attributes #####
 
+    def _retrieve_attribute(self, **kwargs):
+        attribute_id = kwargs.get('id', None)
+        if attribute_id:
+            url = urljoin(self.root_url, 'attributes/view/{}'.format(attribute_id))
+            response = self.__prepare_request('GET', url)
+        else:
+            raise PyMISPError("Either AttributeID or UUID must be given.")
+        return response.json()
+
     def _send_attributes(self, event, attributes, proposal=False):
         """Helper to add new attributes to an existing events"""
         eventID_to_update = None
@@ -1247,6 +1256,31 @@ class PyMISP(object):
         with open(json_file, 'r') as f:
             jdata = json.load(f)
             return self.set_sightings(jdata)
+
+    def get_sightings(self, **kwargs):
+        """
+        Get sightings for an attribute using the uuid or a value to search for
+        :param uuid: UUID of the attribute to get the sighting information from
+        :param value: Value to search in tags for
+        :return: dict containing the UUIDs with the according sightings (sighting, falsepositive, expiration)
+        """
+        uuid = kwargs.get('uuid', None)
+        value = kwargs.get('value', None)
+        result = {}
+
+        if uuid:
+            # Todo
+            pass
+
+        if value:
+            # Todo
+            pass
+
+    def _get_sighting_by_uuid(self, uuid):
+        if not isinstance(uuid, str):
+            raise PyMISPError("UUID given is not a string.")
+
+
 
     # ############## Sharing Groups ##################
 
